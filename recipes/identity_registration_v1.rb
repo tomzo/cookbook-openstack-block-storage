@@ -30,7 +30,7 @@ identity_admin_endpoint = admin_endpoint 'identity-admin'
 bootstrap_token = get_secret 'openstack_identity_bootstrap_token'
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
 # HACK to ensure v1 api endpoint is added
-admin_cinder_api_endpoint = "http://#{node['openstack']['endpoints']['block-storage-api-bind']['host'}:8776/v1/%(tenant_id)s"
+admin_cinder_api_endpoint = "http://#{node['openstack']['endpoints']['block-storage-api-bind']['host']}:8776/v1/%(tenant_id)s"
 internal_cinder_api_endpoint = admin_cinder_api_endpoint 
 public_cinder_api_endpoint = admin_cinder_api_endpoint
 
