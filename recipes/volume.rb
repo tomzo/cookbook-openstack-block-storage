@@ -63,7 +63,7 @@ when 'cinder.volume.drivers.rbd.RBDDriver'
   glance_pool =  node['openstack']['block-storage']['rbd']['glance']['pool']
 
   caps = { 'mon' => 'allow r',
-           'osd' => "allow class-read object_prefix rbd_children, allow rwx pool=#{cinder_pool}, allow rwx pool=#{nova_pool}, allow rx pool=#{glance_pool}" }
+           'osd' => "allow class-read object_prefix rbd_children, allow rwx pool=#{cinder_pool}, allow rwx pool=#{nova_pool}, allow rwx pool=#{glance_pool}" }
 
   ceph_client node['openstack']['block-storage']['rbd']['user'] do
     name node['openstack']['block-storage']['rbd']['user']
