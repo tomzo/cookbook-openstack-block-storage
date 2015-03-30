@@ -185,6 +185,7 @@ when 'cinder.volume.drivers.lvm.LVMISCSIDriver'
 
       service 'cinder-group-active' do
         service_name 'cinder-group-active'
+        provider Chef::Provider::Service::Upstart
 
         action [:enable, :start]
       end
@@ -222,6 +223,7 @@ end
 
 service 'cinder-volume' do
   service_name platform_options['cinder_volume_service']
+  provider Chef::Provider::Service::Upstart
   supports status: true, restart: true
   action [:enable, :start]
   subscribes :restart, 'template[/etc/cinder/cinder.conf]'

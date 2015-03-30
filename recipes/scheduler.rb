@@ -42,6 +42,7 @@ end
 
 service 'cinder-scheduler' do
   service_name platform_options['cinder_scheduler_service']
+  provider Chef::Provider::Service::Upstart
   supports status: true, restart: true
   action [:enable, :start]
   subscribes :restart, 'template[/etc/cinder/cinder.conf]'

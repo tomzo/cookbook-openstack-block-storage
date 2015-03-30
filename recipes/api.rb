@@ -51,6 +51,7 @@ end
 
 service 'cinder-api' do
   service_name platform_options['cinder_api_service']
+  provider Chef::Provider::Service::Upstart
   supports status: true, restart: true
   action :enable
   subscribes :restart, 'template[/etc/cinder/cinder.conf]'
