@@ -62,8 +62,24 @@ when 'cinder.volume.drivers.rbd.RBDDriver'
   nova_pool = node['openstack']['block-storage']['rbd']['nova']['pool']
   glance_pool =  node['openstack']['block-storage']['rbd']['glance']['pool']
 
+  multi_backend = node['openstack']['block-storage']['volume']['multi_backend']
+  if multi_backend.nil?
+    cinder_perms = "allow rwx pool=#{cinder_pool},"
+  else
+    # there may be many pools to back RBD volumes
+    cinder_perms = ''
+    multi_backend.each do |drv, options|
+      driver = options['volume_driver']
+      # but not all backends have to be RBD
+      next if driver.nil? || driver != 'cinder.volume.drivers.rbd.RBDDriver'
+      cinder_rbd_pool = options['rbd_pool']
+      next if cinder_rbd_pool.nil?
+      cinder_perms << "allow rwx pool=#{cinder_rbd_pool},"
+    end
+  end
+
   caps = { 'mon' => 'allow r',
-           'osd' => "allow class-read object_prefix rbd_children, allow rwx pool=#{cinder_pool}, allow rwx pool=#{nova_pool}, allow rwx pool=#{glance_pool}" }
+           'osd' => "allow class-read object_prefix rbd_children, #{cinder_perms} allow rwx pool=#{nova_pool}, allow rwx pool=#{glance_pool}" }
 
   ceph_client node['openstack']['block-storage']['rbd']['user'] do
     name node['openstack']['block-storage']['rbd']['user']
