@@ -264,6 +264,19 @@ default['openstack']['block-storage']['volume']['iscsi_helper'] = 'tgtadm'
 default['openstack']['block-storage']['volume']['iscsi_ip_address'] = node['ipaddress']
 default['openstack']['block-storage']['volume']['iscsi_port'] = '3260'
 
+# Cinder backup options
+
+# disabled by default
+default['openstack']['block-storage']['backup']['driver'] = nil
+
+# options for cinder.backup.drivers.ceph driver
+default['openstack']['block-storage']['backup']['ceph']['conf'] = '/etc/ceph/ceph.conf'
+default['openstack']['block-storage']['backup']['ceph']['user'] = 'cinder'
+default['openstack']['block-storage']['backup']['ceph']['chunk_size'] = 134217728
+default['openstack']['block-storage']['backup']['ceph']['pool'] = 'backups'
+default['openstack']['block-storage']['backup']['ceph']['stripe_unit'] = 0
+default['openstack']['block-storage']['backup']['ceph']['stripe_count'] = 0
+
 # Ceph/RADOS options
 default['openstack']['block-storage']['rbd']['cinder']['pool'] = 'volumes'
 default['openstack']['block-storage']['rbd']['glance']['pool'] = 'images'
@@ -314,6 +327,8 @@ when 'fedora', 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
     'cinder_client_packages' => ['python-cinderclient'],
     'cinder_volume_packages' => ['qemu-img'],
     'cinder_volume_service' => 'openstack-cinder-volume',
+# TODO 'cinder_backup_packages' => ['cinder-backup'],
+# TODO 'cinder_backup_service' => 'cinder-backup',
     'cinder_scheduler_packages' => [],
     'cinder_scheduler_service' => 'openstack-cinder-scheduler',
     'cinder_iscsitarget_packages' => ['targetcli'],
@@ -337,6 +352,8 @@ when 'suse'
     'cinder_scheduler_service' => 'openstack-cinder-scheduler',
     'cinder_volume_packages' => ['openstack-cinder-volume', 'qemu-img'],
     'cinder_volume_service' => 'openstack-cinder-volume',
+# TODO 'cinder_backup_packages' => ['cinder-backup'],
+# TODO 'cinder_backup_service' => 'cinder-backup',
     'cinder_ceph_packages' => ['python-ceph', 'ceph-common'],
     'cinder_iscsitarget_packages' => ['tgt'],
     'cinder_iscsitarget_service' => 'tgtd',
@@ -355,6 +372,8 @@ when 'debian'
     'cinder_client_packages' => ['python-cinderclient'],
     'cinder_volume_packages' => ['cinder-volume', 'qemu-utils'],
     'cinder_volume_service' => 'cinder-volume',
+    'cinder_backup_packages' => ['cinder-backup'],
+    'cinder_backup_service' => 'cinder-backup',
     'cinder_scheduler_packages' => ['cinder-scheduler'],
     'cinder_scheduler_service' => 'cinder-scheduler',
     'cinder_ceph_packages' => ['python-ceph', 'ceph-common'],
