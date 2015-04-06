@@ -1021,6 +1021,21 @@ gpfs_storage_pool = <%= node['openstack']['block-storage']['gpfs']['gpfs_storage
 enabled_backends = <%= @multi_backend_sections.keys.join(',') %>
 <% end %>
 
+# Backup service options
+
+<% if node['openstack']['block-storage']['backup']['driver'] %>
+backup_driver = <%= node['openstack']['block-storage']['backup']['driver'] %>
+<% case node['openstack']['block-storage']['backup']['driver'] %>
+<% when 'cinder.backup.drivers.ceph' %>
+backup_ceph_conf= <%= node['openstack']['block-storage']['backup']['ceph']['conf'] %>
+backup_ceph_user = <%= node['openstack']['block-storage']['backup']['ceph']['user'] %>
+backup_ceph_chunk_size = <%= node['openstack']['block-storage']['backup']['ceph']['chunk_size'] %>
+backup_ceph_pool = <%= node['openstack']['block-storage']['backup']['ceph']['pool'] %>
+backup_ceph_stripe_unit = <%= node['openstack']['block-storage']['backup']['ceph']['stripe_unit'] %>
+backup_ceph_stripe_count = <%= node['openstack']['block-storage']['backup']['ceph']['stripe_count'] %>
+<% end %>
+<% end %>
+
 # Misc options
 <% if node["openstack"]["block-storage"]["misc_cinder"] %>
 <% node["openstack"]["block-storage"]["misc_cinder"].each do |m| %>
