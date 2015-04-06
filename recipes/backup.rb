@@ -19,3 +19,11 @@ when 'cinder.backup.drivers.ceph'
   include_recipe 'ceph'
 # TODO ensure cephx authorization without repeating code already in volume recipe
 end
+
+service 'cinder-backup' do
+  service_name platform_options['cinder_backup_service']
+  provider Chef::Provider::Service::Upstart if node[:platform] == 'ubuntu'
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
+end
